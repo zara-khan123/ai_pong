@@ -1,6 +1,3 @@
-
-
-
 var paddle2 =10,paddle1=10;
 
 var paddle1X = 10,paddle1Height = 110;
@@ -20,6 +17,13 @@ var ball = {
     dx:3,
     dy:3
 }
+
+function preload()
+{
+  missed = loadSound("missed.wav");
+  ball_paddle = loadSound("ball_touch_paddle.wav");
+}
+
 
 function setup(){
   var canvas =  createCanvas(700,600);
@@ -57,14 +61,13 @@ function startGame()
 }
 
 
-
-
 function draw(){
 
   if(game_status == "start")
   {
     background(0); 
     image(video, 0, 0, 700, 600);
+  
 
  fill("black");
  stroke("black");
@@ -101,7 +104,8 @@ function draw(){
    
    //function move call which in very important
     move();
-}
+  }}
+
 
 
 
@@ -154,9 +158,11 @@ function move(){
   if (ball.y >= paddle1Y&& ball.y <= paddle1Y + paddle1Height) {
     ball.dx = -ball.dx+0.5;
     playerscore++;
+    ball_paddle.play();
   }
   else{
     pcscore++;
+    missed.play();
     reset();
     navigator.vibrate(100);
   }
@@ -190,7 +196,7 @@ function models(){
 }
 
 
-//this function help to not go te paddle out of canvas
+//this function help to not go the paddle out of canvas
 function paddleInCanvas(){
   if(mouseY+paddle1Height > height){
     mouseY=height-paddle1Height;
@@ -198,4 +204,11 @@ function paddleInCanvas(){
   if(mouseY < 0){
     mouseY =0;
   }  
+}
+
+function restart()
+{
+  loop();
+  pcscore = 0;
+  playerscore = 0;
 }
